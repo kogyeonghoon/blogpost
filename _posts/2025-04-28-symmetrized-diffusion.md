@@ -36,12 +36,16 @@ The generation of novel 3D molecular structures is a significant task in computa
 ### Forward and Reverse Stochastic Differential Equations (SDEs)
 
 In common, diffusion models operate in Euclidean space $$\mathcal{X} = \mathbb{R}^d$$. The forward noising often uses an Ornstein-Uhlenbeck (OU) process:
+
 $$dx^{(t)} = -\frac{1}{2}x^{(t)}dt + dw^{(t)} , \quad t \in [0,T]$$
+
 where $$w^{(t)}$$ is the standard d-dimensional Wiener process. This process has Gaussian transition kernels $$p_{t|s}(y|x)$$ and marginals $$p_t(x)$$ for $$0 \leq s < t \leq 0$$. The reverse denoising process follows the following SDE:
+
 $$dx^{(t)} = \left[-\frac{1}{2}x^{(t)} - \nabla_{x^{(t)}} \log p_t(x^{(t)})\right]dt + d\overline{w}^{(t)} $$
+
 where $$\overline{w}^{(t)}$$ is a Wiener process running in reverse time. The backward transition kernel parametrized by $$q_{\theta, s|t}$$, with a model parameter $$\theta$$, enabling sampling from the data distribution by solving the reverse SDE.
 
-The score function $$\nabla_{x^{ (t) }} \log p_{t}(x^{ (t) })$$ is approximated by a neural network $$s_{ \theta }( x^{ (t) }, t)$$, trained using a denoising score loss. Given an initial sample $$x^{(0)}$$ and a noisy sample $$x^{ (t) }$$ obtained by perturbing $$x^{ (0) }$$ according to the forward process, the denoising score loss trains $$s_{\theta}( x^{ (t) }, t)$$ to estimate $$\nabla_{ x^{ (t) } } \log p_{t|0}{ ( x^{ (t) } | x^{ (0) }) }$$. This objective provides an unbiased estimate for the score function $$\nabla_{ x^{ (t) } } \log p_{t}( x^{ (t) } )$$. Note that, the target quantity $$\nabla_{ x^{ (t) } } \log p_{t|0}( x^{ (t) } | x^{ (0) } )$$ can be expressed in a closed-form equation since the transition kernel $$p_{t|0}$$ is a closed form Gaussian.
+The score function $$\nabla_{x^{ (t) }} \log p_{t}(x^{ (t) })$$ is approximated by a neural network $$s_{ \theta }( x^{ (t) }, t)$$, trained using a denoising score loss. Given an initial sample $$x^{(0)}$$ and a noisy sample $$x^{ (t) }$$ obtained by perturbing $$x^{ (0) }$$ according to the forward process, the denoising score loss trains $$s_{\theta}( x^{ (t) }, t)$$ to estimate $$ \nabla_{ x^{ (t) } } \log p_{t|0} { ( x^{ (t) } | x^{ (0) }) } $$. This objective provides an unbiased estimate for the score function $$ \nabla_{ x^{ (t) } } \log p_{t} ( x^{ (t) } )$$. Note that, the target quantity $$\nabla_{ x^{ (t) } } \log p_{t|0}( x^{ (t) } | x^{ (0) } )$$ can be expressed in a closed-form equation since the transition kernel $$p_{t|0}$$ is a closed form Gaussian.
 
 ***
 ### Heat Kernel and Score Function Computation

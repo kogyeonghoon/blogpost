@@ -4,3 +4,128 @@
   journal={arXiv preprint arXiv:2011.13456},
   year={2020}
 }
+
+@article{anderson1982reverse,
+  title={Reverse time diffusion},
+  author={Anderson, Brian DO},
+  journal={Stochastic Processes and their Applications},
+  volume={12},
+  number={3},
+  pages={313--326},
+  year={1982},
+  publisher={Elsevier}
+}
+
+@inproceedings{vincent2011connection,
+  title={A connection between score matching and denoising autoencoders},
+  author={Vincent, Pascal},
+  booktitle={Neural computation},
+  volume={23},
+  number={7},
+  pages={1661--1674},
+  year={2011},
+  organization={MIT Press}
+}
+
+@book{berline2003heat,
+  title={Heat kernels and Dirac operators},
+  author={Berline, Nicole and Getzler, Ezra and Vergne, Mich{\`e}le},
+  year={2003},
+  publisher={Springer Science & Business Media}
+}
+
+@book{elworthy1988geometric,
+  title={Geometric aspects of diffusions on manifolds},
+  author={Elworthy, K David},
+  in={{\'E}cole d’{\'E}t{\'e} de Probabilit{\'e}s de Saint-Flour XV--XVII, 1985--87},
+  pages={277--425},
+  year={1988},
+  publisher={Springer}
+}
+
+@book{hsu2002stochastic,
+  title={Stochastic analysis on manifolds},
+  author={Hsu, Elton P},
+  volume={38},
+  year={2002},
+  publisher={American Mathematical Soc.}
+}
+
+@article{hastings1970monte,
+  title={Monte Carlo sampling methods using Markov chains and their applications},
+  author={Hastings, W Keith},
+  journal={Biometrika},
+  volume={57},
+  number={1},
+  pages={97--109},
+  year={1970},
+  publisher={Oxford University Press}
+}
+
+@article{lipman2023flow,
+  title={Flow Matching for Generative Modeling},
+  author={Lipman, Yaron and Chen, Ricky TQ and Ben-Hamu, Heli and Nickel, Maximilian and Le, Matt},
+  journal={arXiv preprint arXiv:2210.02747},
+  year={2023}
+}
+
+@article{liu2022flow,
+  title={Flow Straight and Fast: Learning to Generate Straight Lines},
+  author={Liu, Xingchao and Gong, Chengyue and Anandkumar, Anima},
+  journal={arXiv preprint arXiv:2210.01574},
+  year={2022}
+}
+
+@article{pooladian2023equivariant,
+  title={Equivariant Flow Matching},
+  author={Pooladian, Aram-Alexandre and Le, Matt and Ghorbani, Behrooz and Anandkumar, Anima and Lipman, Yaron},
+  journal={arXiv preprint arXiv:2306.04460},
+  year={2023}
+}
+
+@article{kuhn1955hungarian,
+  title={The Hungarian method for the assignment problem},
+  author={Kuhn, Harold W},
+  journal={Naval research logistics quarterly},
+  volume={2},
+  number={1-2},
+  pages={83--97},
+  year={1955},
+  publisher={Wiley Online Library}
+}
+
+@article{ramakrishnan2014quantum,
+  title={Quantum chemistry structures and properties of 134 kilo molecules},
+  author={Ramakrishnan, Raghunathan and Dral, Pavlo O and Rupp, Matthias and Von Lilienfeld, O Anatole},
+  journal={Scientific data},
+  volume={1},
+  number={1},
+  pages={1--7},
+  year={2014},
+  publisher={Nature Publishing Group}
+}
+
+@article{le2024eqgatdiff,
+  title={EQGAT-Diff: Equivariant Graph Attention Network for 3D Molecular Diffusion},
+  author={Le, Tuan and Nguyen, Dinh Duc and Nguyen, Kien and Bui, Tuan Anh and Luu, Hieu},
+  journal={arXiv preprint arXiv:2402.01686},
+  year={2024}
+}
+
+@misc{rdkit_software,
+  author = {RDKit Contributors},
+  title = {RDKit: Open-source cheminformatics},
+  howpublished = {\url{http://www.rdkit.org}},
+  year = {2006--\textit{present}}
+}
+
+@article{axelrod2022geom,
+  title={GEOM, a crowd-sourced geometry benchmark for molecular property prediction},
+  author={Axelrod, Simon and Gomez-Bombarelli, Rafael},
+  journal={Scientific Data},
+  volume={9},
+  number={1},
+  pages={185},
+  year={2022},
+  publisher={Nature Publishing Group}
+}

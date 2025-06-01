@@ -35,17 +35,17 @@ The generation of novel 3D molecular structures is a significant task in computa
 ***
 ### Forward and Reverse Stochastic Differential Equations (SDEs)
 
-In common, diffusion models operate in Euclidean space $$\mathcal{X} = \mathbb{R}^d$$. The **forward noising** often uses an **Ornstein-Uhlenbeck (OU) process** <d-cite key="song2020score">:
+In common, diffusion models operate in Euclidean space $$\mathcal{X} = \mathbb{R}^d$$. The **forward noising** often uses an **Ornstein-Uhlenbeck (OU) process** <d-cite key="song2020score"></d-cite>:
 
 $$dx^{(t)} = -\frac{1}{2}x^{(t)}dt + dw^{(t)} , \quad t \in [0,T]$$
 
-where $$w^{(t)}$$ is the standard $$d$$-dimensional Wiener process. This process has Gaussian transition kernels $$p_{t \mid s}(y \mid x)$$ and marginals $$p_t(x)$$ for $$0 \leq s < t \leq 0$$. The **reverse denoising process** follows the following SDE:
+where $$w^{(t)}$$ is the standard $$d$$-dimensional Wiener process. This process has Gaussian transition kernels $$p_{t \mid s}(y \mid x)$$ and marginals $$p_t(x)$$ for $$0 \leq s < t \leq 0$$. The **reverse denoising process** follows the following SDE <d-cite key="anderson1982reverse"></d-cite>:
 
 $$dx^{(t)} = \left[-\frac{1}{2}x^{(t)} - \nabla_{x^{(t)}} \log p_t(x^{(t)})\right]dt + d\overline{w}^{(t)} $$
 
 where $$\overline{w}^{(t)}$$ is a Wiener process running in reverse time. The backward transition kernel parametrized by $$q_{\theta, s \mid t}$$, with a model parameter $$\theta$$, enabling sampling from the data distribution by solving the reverse SDE.
 
-The **score function** $$\nabla_{x^{ (t) }} \log p_{t}(x^{ (t) })$$ is approximated by a neural network $$s_{ \theta }( x^{ (t) }, t)$$, trained using a denoising score loss. Given an initial sample $$x^{(0)}$$ and a noisy sample $$x^{ (t) }$$ obtained by perturbing $$x^{ (0) }$$ according to the forward process, the denoising score loss trains $$s_{\theta}( x^{ (t) }, t)$$ to estimate $$ \nabla_{ x^{ (t) } } \log p_{t \mid 0} { ( x^{ (t) }  \mid  x^{ (0) }) } $$. This objective provides an unbiased estimate for the score function $$ \nabla_{ x^{ (t) } } \log p_{t} ( x^{ (t) } )$$. Note that, the target quantity $$\nabla_{ x^{ (t) } } \log p_{t \mid 0}( x^{ (t) }  \mid  x^{ (0) } )$$ can be expressed in a closed-form equation since the transition kernel $$p_{t \mid 0}$$ is a closed form Gaussian.
+The **score function** $$\nabla_{x^{ (t) }} \log p_{t}(x^{ (t) })$$ is approximated by a neural network $$s_{ \theta }( x^{ (t) }, t)$$, trained using a denoising score loss <d-cite key="vincent2011connection"></d-cite>. Given an initial sample $$x^{(0)}$$ and a noisy sample $$x^{ (t) }$$ obtained by perturbing $$x^{ (0) }$$ according to the forward process, the denoising score loss trains $$s_{\theta}( x^{ (t) }, t)$$ to estimate $$ \nabla_{ x^{ (t) } } \log p_{t \mid 0} { ( x^{ (t) }  \mid  x^{ (0) }) } $$. This objective provides an unbiased estimate for the score function $$ \nabla_{ x^{ (t) } } \log p_{t} ( x^{ (t) } )$$. Note that, the target quantity $$\nabla_{ x^{ (t) } } \log p_{t \mid 0}( x^{ (t) }  \mid  x^{ (0) } )$$ can be expressed in a closed-form equation since the transition kernel $$p_{t \mid 0}$$ is a closed form Gaussian.
 
 ***
 ### Heat Kernel and Score Function Computation
@@ -102,7 +102,7 @@ The Ornstein-Uhlenbeck process is pushed forward to $$\tilde{\mathcal{X}}$$. The
 
 $$d\tilde{x}^{(t)} = -\frac{1}{2}\tilde{x}^{(t)}dt + d\tilde{w}^{(t)}$$
 
-where $$\tilde{w}^{(t)}$$ is the Brownian motion in the quotient manifold $$\hat{\mathcal{X}}$$ and  Again, since the permutations are isometries, the Brownian motion $$\tilde{w}^{(t)}$$ can be seen as a naive push-forward of $$w^{(t)}$$ via the quotient map. The SDE in a Riemannian manifold can also be reversed just like we did in the Euclidean space [cite], and the **reverse SDE** is given as 
+where $$\tilde{w}^{(t)}$$ is the Brownian motion in the quotient manifold $$\hat{\mathcal{X}}$$ and  Again, since the permutations are isometries, the Brownian motion $$\tilde{w}^{(t)}$$ can be seen as a naive push-forward of $$w^{(t)}$$ via the quotient map. The SDE in a Riemannian manifold can also be reversed just like we did in the Euclidean space <d-cite key="elworthy1988geometric,hsu2002stochastic"></d-cite>, and the **reverse SDE** is given as 
 
 $$d\tilde{x}^{(t)} = \left[-\frac{1}{2}\tilde{x}^{(t)} - \nabla_{\tilde{x}^{(t)}} \log \tilde{p}_t(\tilde{x}^{(t)})\right]dt + d\overline{\tilde{w}}^{(t)}$$
 
@@ -127,7 +127,7 @@ $$
 
 ### Comparison with Equivariant Flow Matching
 
-Formulating diffusion models on Riemannian manifolds often requires complex information, like the manifold's heat kernel. In contrast, **flow matching** methods provide a simpler framework for generative models on these manifolds, needing only the exponential map and its inverse. **Equivariant Flow Matching** [cite] is in fact a direct flow-matching version of our approach but also incorporates rotational symmetry. When we model a point cloud as an element in a quotient manifold, the shortest geodesic between original and diffused states is found by identifying the permutation that optimally connects them, a task solved using the Hungarian algorithm.
+Formulating diffusion models on Riemannian manifolds often requires complex information, like the manifold's heat kernel. In contrast, **flow matching** methods provide a simpler framework for generative models on these manifolds, needing only the exponential map and its inverse  <d-cite key="lipman2023flow,liu2022flow"></d-cite>. **Equivariant Flow Matching** <d-cite key="pooladian2023equivariant"></d-cite> is in fact a direct flow-matching version of our approach but also incorporates rotational symmetry. When we model a point cloud as an element in a quotient manifold, the shortest geodesic between original and diffused states is found by identifying the permutation that optimally connects them, a task solved using the Hungarian algorithm <d-cite key="kuhn1955hungarian"></d-cite>.
 
 ## Experiment
 
@@ -138,12 +138,12 @@ To evaluate the effectiveness of our **Permutation Symmetrized Diffusion Model**
 
 * **Dataset**: We utilize the **QM9 dataset** <d-cite key="ramakrishnan2014quantum"></d-cite>, a widely adopted benchmark in molecular machine learning. QM9 consists of approximately 134,000 small organic molecules, each containing up to nine heavy atoms (Carbon, Nitrogen, Oxygen, and Fluorine), along with their 3D Cartesian coordinates.
 * **Task**: The task is **unconditional generation**, meaning the model generates 3D molecular structures without any input conditions like a molecular graph or target properties.
-* **Baseline Comparison**: We compare our method against **eqgat-diff** <d-cite key="PUT_EQGAT_DIFF_CITATION_KEY_HERE"></d-cite>, a notable equivariant diffusion model for 3D molecular generation. We aim to compare against reported results for eqgat-diff on the QM9 dataset.
+* **Baseline Comparison**: We compare our method against **eqgat-diff** <d-cite key="le2024eqgatdiff"></d-cite>, a notable equivariant diffusion model for 3D molecular generation. We aim to compare against reported results for eqgat-diff on the QM9 dataset.
 * **Our Model Details**: Our Permutation Symmetrized Diffusion Model is trained as described in the preceding sections. The score function $$\nabla \log \tilde{p}_t$$ was approximated using a neural network, and the training objective involved MCMC sampling to estimate the expectation $$\mathbb{E}_{\mathcal{S}}[\nabla_{y}I(\sigma)]$$.
 * **Evaluation Metrics**: We assessed the generated molecules using the following standard metrics:
     * **Atom Stability**: The percentage atoms that adhere to valency rules (e.g. a carbon atom has a valency 4).
     * **Molecule Stability**: The percentage of generated molecules in which atoms are all stable.
-    * **Validity**: The percentage of chemically valid molecules, as assessed by RDKit.
+    * **Validity**: The percentage of chemically valid molecules, as assessed by RDKit <d-cite key="rdkit_software"></d-cite>.
     * **Uniqueness**: The percentage of valid generated molecules that are unique (based on their canonical SMILES representation) within a larger batch of generated samples, discounting isomorphic structures.
     * **Novelty**: The percentage of unique and valid generated molecules that are not present in the QM9 training dataset.
 
@@ -203,7 +203,7 @@ We generated 10000 samples using our trained Permutation Symmetrized Diffusion M
 
 ### Future Directions
 
-In this article, we introduce a current stauts of an ongoing research. As this research continues, we plan to analyze sampling trajectories and better understand the model's dynamics on the quotient manifold. We hope these insights will guide core methodology improvements, such as optimized noise schedules and more efficient MCMC sampling strategies, aiming for better score matching and faster convergence. We also plan to evaluate scalability and generalizability using larger, more complex datasets like GEOM-DRUG. We look forward to our permutation-symmetrized approach improving diffusion model methodologies for 3D molecular generation tasks.
+In this article, we introduce a current stauts of an ongoing research. As this research continues, we plan to analyze sampling trajectories and better understand the model's dynamics on the quotient manifold. We hope these insights will guide core methodology improvements, such as optimized noise schedules and more efficient MCMC sampling strategies, aiming for better score matching and faster convergence. We also plan to evaluate scalability and generalizability using larger, more complex datasets like GEOM-DRUG <d-cite key="axelrod2022geom"></d-cite>. We look forward to our permutation-symmetrized approach improving diffusion model methodologies for 3D molecular generation tasks.
 
 
 

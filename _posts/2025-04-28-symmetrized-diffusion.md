@@ -1,17 +1,13 @@
 ---
 layout: distill
 title: Permutation Symmetrized Diffusion Models for 3D Molecular Generation
-description: This article introduces the core concepts behind Permutation Symmetrized Diffusion Models for 3D Molecular Generation, a novel approach that addresses the inherent permutation symmetry of molecular data.
+description: This article introduces an ongoing research called Permutation Symmetrized Diffusion Models for 3D Molecular Generation, a novel approach that addresses the inherent permutation symmetry of molecular data.
 date: 2025-04-28 # You can change this date as needed
 authors:
   - name: Author One # Placeholder, please update
     # url: "Link to Author One's page"
     # affiliations:
     #   name: "Affiliation One"
-  - name: Author Two # Placeholder, please update
-    # url: "Link to Author Two's page"
-    # affiliations:
-    #   name: "Affiliation Two"
 bibliography: 2025-04-28-symmetrized-diffusion.bib # Assumed bibliography file name. This file would need to be created with the corresponding citation keys if using <d-cite> tags.
 toc:
   - name: Original Diffusion Process Euclidean Space
@@ -24,7 +20,12 @@ toc:
     - name: Heat Kernel on the Quotient Manifold
     - name: SDEs on the Quotient Manifold
     - name: Training Objective
-  - name: Significance
+    - name: Comparison with Equivariant Flow Matching
+  - name: Experiment
+    subsections:
+    - name: Experimental Setup
+    - name: Results and Discussion
+    - name: Future Directions
 ---
 
 The generation of novel 3D molecular structures is a significant task in computational chemistry, drug discovery, and materials science. Diffusion-based generative models have emerged as a powerful class of methods for such tasks. In this article, we propose a novel formulation of diffusion models that incorporates a stronger notion of permutation symmetry.
@@ -138,7 +139,7 @@ To evaluate the effectiveness of our **Permutation Symmetrized Diffusion Model**
 
 * **Dataset**: We utilize the **QM9 dataset** <d-cite key="ramakrishnan2014quantum"></d-cite>, a widely adopted benchmark in molecular machine learning. QM9 consists of approximately 134,000 small organic molecules, each containing up to nine heavy atoms (Carbon, Nitrogen, Oxygen, and Fluorine), along with their 3D Cartesian coordinates.
 * **Task**: The task is **unconditional generation**, meaning the model generates 3D molecular structures without any input conditions like a molecular graph or target properties.
-* **Baseline Comparison**: We compare our method against **eqgat-diff** <d-cite key="le2024eqgatdiff"></d-cite>, a notable equivariant diffusion model for 3D molecular generation. We aim to compare against reported results for eqgat-diff on the QM9 dataset.
+* **Baseline Comparison**: We compare our method against **EQGAT-diff** <d-cite key="le2024eqgatdiff"></d-cite>, a notable equivariant diffusion model for 3D molecular generation. We aim to compare against reported results for EQGAT-diff on the QM9 dataset.
 * **Our Model Details**: Our Permutation Symmetrized Diffusion Model is trained as described in the preceding sections. The score function $$\nabla \log \tilde{p}_t$$ was approximated using a neural network, and the training objective involved MCMC sampling to estimate the expectation $$\mathbb{E}_{\mathcal{S}}[\nabla_{y}I(\sigma)]$$.
 * **Evaluation Metrics**: We assessed the generated molecules using the following standard metrics:
     * **Atom Stability**: The percentage atoms that adhere to valency rules (e.g. a carbon atom has a valency 4).
@@ -150,16 +151,8 @@ To evaluate the effectiveness of our **Permutation Symmetrized Diffusion Model**
 ---
 ### Results and Discussion
 
-We generated 10000 samples using our trained Permutation Symmetrized Diffusion Model and evaluated them according to the metrics defined above. The performance of our model compared to eqgat-diff is presented in Table 1. Since this is an ongoing research, we present the metrics measured only once.
+We generated 10000 samples using our trained Permutation Symmetrized Diffusion Model and evaluated them according to the metrics defined above. The performance of our model compared to EQGAT-diff is presented in Table 1. Since this is an ongoing research, we present the metrics measured only once.
 
-<!-- | Metric                         | Our Method  | eqgat-diff (Reported) <d-cite key="PUT_EQGAT_DIFF_CITATION_KEY_HERE"></d-cite> |
-| :----------------------------- | :--------------------------------------------- | :------------------------------------------------ |
-| Molecule Stability (%)         | 98.95        | 98.68 ± 0.11           |
-| Atom Stability (%)             | 99.91         | 99.92 ± 0.00           |
-| Validity (%)                   | 99.05        | 98.96 ± 0.07         |
-| Uniqueness (%)                 |   100.00       | 100.00 ± 0.00          |
-| Novelty (%)                    | 63.33          | 64.03 ± 0.24          |
-*Table 1: Comparison of unconditional 3D molecular generation performance on the QM9 dataset.* -->
 
 <div style="display:flex; align-items:center; justify-content: center; margin:20px; font-size:14px;">
     <table style="border-collapse: collapse; text-align: center; border: 0px;">
@@ -167,7 +160,7 @@ We generated 10000 samples using our trained Permutation Symmetrized Diffusion M
         <tr>
           <th style="border: 0px; border-bottom: 2px solid grey; padding: 8px; font-weight: 900; text-align: left;">Metric</th>
           <th style="border: 0px; border-bottom: 2px solid grey; padding: 8px; font-weight: 900; text-align: center;">Our Method</th>
-          <th style="border: 0px; border-bottom: 2px solid grey; padding: 8px; font-weight: 900; text-align: center;">eqgat-diff (Reported) <d-cite key="PUT_EQGAT_DIFF_CITATION_KEY_HERE"></d-cite></th>
+          <th style="border: 0px; border-bottom: 2px solid grey; padding: 8px; font-weight: 900; text-align: center;">EQGAT-diff (Reported) <d-cite key="PUT_EQGAT_DIFF_CITATION_KEY_HERE"></d-cite></th>
         </tr>
       </thead>
       <tbody>

@@ -41,7 +41,7 @@ where $w^{(t)}$ is the standard d-dimensional Wiener process. This process has G
 $$dx^{(t)} = \left[-\frac{1}{2}x^{(t)} - \nabla_{x^{(t)}} \log p_t(x^{(t)})\right]dt + d\overline{w}^{(t)} $$
 where $\overline{w}^{(t)}$ is a Wiener process running in reverse time. The backward transition kernel parametrized by $q_{\theta, s|t}$, with a model parameter $\theta$, enabling sampling from the data distribution by solving the reverse SDE.
 
-The score function $\nabla_{x^{(t)}} \log p_{t}(x^{(t)})$ is approximated by a neural network $s_{\theta}(x^{(t)}, t)$, trained using a denoising score loss. Given an initial sample $x^{(0)}$ and a noisy sample $x^{(t)}$ obtained by perturbing $x^{(0)}$ according to the forward process, the denoising score loss trains $s_{\theta}(x^{(t)}, t)$ to estimate123 $\nabla_{x^{(t)}} \log p_{t|0}{(x^{(t)}|x^{(0)})}$. This objective provides an unbiased estimate for the score function $\nabla_{x^{(t)}} \log p_{t}(x^{(t)})$. Note that, the target quantity $\nabla_{x^{(t)}} \log p_{t|0}(x^{(t)}|x^{(0)})$ can be expressed in a closed-form equation since the transition kernel $p_{t|0}$ is a closed form Gaussian.
+The score function $\nabla_{x^{ (t) }} \log p_{t}(x^{ (t) })$ is approximated by a neural network $s_{\theta}(x^{ (t) }, t)$, trained using a denoising score loss. Given an initial sample $x^{(0)}$ and a noisy sample $x^{(t)}$ obtained by perturbing $x^{(0)}$ according to the forward process, the denoising score loss trains $s_{\theta}(x^{(t)}, t)$ to estimate123 $\nabla_{x^{ (t) }} \log p_{t|0}{ (x^{(t)} | x^{(0)}) }$. This objective provides an unbiased estimate for the score function $\nabla_{ x^{(t)} } \log p_{t}( x^{(t)} )$. Note that, the target quantity $\nabla_{ x^{(t)} } \log p_{t|0}( x^{(t)} | x^{(0)} )$ can be expressed in a closed-form equation since the transition kernel $p_{t|0}$ is a closed form Gaussian.
 
 ***
 ### Heat Kernel and Score Function Computation
@@ -70,10 +70,10 @@ On the other hand, we can think of a stronger notion of utilizing the symmetry. 
 ***
 ### Heat Kernel on the Quotient Manifold
 
-Since the permutations are isometries of the Euclidean space, $\tilde{\mathcal{X}}$ inherits the Euclidean metric and has a well-defined heat kernel. Theorem 3.1 states the heat kernel $K^{\tilde{\mathcal{X}}}(t, \tilde{x}, \tilde{y})$ for $\tilde{x}, \tilde{y} \in \tilde{\mathcal{X}}$ is given by:
+Since the permutations are isometries of the Euclidean space, $\tilde{\mathcal{X}}$ inherits the Euclidean metric and has a well-defined heat kernel. The heat kernel $K^{\tilde{\mathcal{X}}}(t, \tilde{x}, \tilde{y})$ on $\tilde{\mathcal{X}}$ for $\tilde{x}, \tilde{y} \in \tilde{\mathcal{X}}$ is given by:
 $$K^{\tilde{\mathcal{X}}}(t, \tilde{x}, \tilde{y}) = \frac{1}{(4\pi t)^{dN/2}} \sum_{\sigma \in S_N} \exp\left(-\frac{\|x - \sigma(y)\|^2}{4t}\right)$$
 $$= \frac{1}{(4\pi t)^{dN/2}} \sum_{\sigma \in S_N} \prod_{i=1}^{N} \exp\left(-\frac{\|x_i - y_{\sigma^{-1}(i)}\|^2}{4t}\right) \quad$$
-This kernel is the sum of Euclidean heat kernels over all permutations, arising because permutations are Euclidean isometries. This means a particle $x_1$ can diffuse to any $y_i$, considering all $\sigma \in S_N$.
+This kernel is the sum of Euclidean heat kernels over all permutations, arising because permutations are Euclidean isometries. 
 
 ***
 ### SDEs on the Quotient Manifold

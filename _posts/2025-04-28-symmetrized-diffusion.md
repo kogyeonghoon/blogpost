@@ -54,7 +54,7 @@ Beneath the formulation of diffusion models, there is an important fact that the
 
 $$K(t,x,y) = \frac{1}{(4\pi t)^{d/2}} \exp\left(-\frac{ \mid x-y \mid ^2}{4t}\right).$$
 
-Since the forward process distributions are Gaussian, their score functions (e.g., $$\nabla_{x^{(t)}} \log p_{t \mid 0}(x^{(t)} \mid x^{(0)})$$) have closed-form expressions, enabling training of a neural network $$s_{\theta}(x^{(t)}, t)$$ to approximate them.
+Since the forward process distributions are Gaussian, the score functions (e.g., $$\nabla_{x^{(t)}} \log p_{t \mid 0}(x^{(t)} \mid x^{(0)})$$) have closed-form expressions, enabling training of a neural network $$s_{\theta}(x^{(t)}, t)$$ to approximate them.
 
 ***
 ## Method: Permutation Symmetrized Diffusion
@@ -102,11 +102,13 @@ The Ornstein-Uhlenbeck process is pushed forward to $$\tilde{\mathcal{X}}$$. The
 
 $$d\tilde{x}^{(t)} = -\frac{1}{2}\tilde{x}^{(t)}dt + d\tilde{w}^{(t)}$$
 
-and the **reverse SDE** is:
+where $$\tilde{w}^{(t)}$$ is the Brownian motion in the quotient manifold $$\hat{\mathcal{X}}$$ and  Again, since the permutations are isometries, the Brownian motion $$\tilde{w}^{(t)}$$ can be seen as a naive push-forward of $$w^{(t)}$$ via the quotient map. The SDE in a Riemannian manifold can also be reversed just like we did in the Euclidean space [cite], and the **reverse SDE** is given as 
 
 $$d\tilde{x}^{(t)} = \left[-\frac{1}{2}\tilde{x}^{(t)} - \nabla_{\tilde{x}^{(t)}} \log \tilde{p}_t(\tilde{x}^{(t)})\right]dt + d\overline{\tilde{w}}^{(t)}$$
 
-where $$\tilde{w}^{(t)}$$ is the Brownian motion in the quotient manifold $$\hat{\mathcal{X}}$$ and $$\overline{\tilde{w}}^{(t)}$$ is its time-reversed version. Note that obtaining the push-forward of the SDEs did not require complicated considerations becauese the OU process permutation invariant. Since the heat kernel is a sum over permutations, the transition kernels $$\tilde{p}_{t \mid s}$$ and marginals $$\tilde{p}_t$$ on the quotient manifold are similarly obtained by summing their Euclidean counterparts over all permutations.
+where $$\overline{\tilde{w}}^{(t)}$$ is the time-reversed version of the Brownian motion.
+
+Since the heat kernel is a sum over permutations, the transition kernels $$\tilde{p}_{t \mid s}$$ and marginals $$\tilde{p}_t$$ on the quotient manifold are similarly obtained by summing their Euclidean counterparts over all permutations.
 
 ***
 ### Training Objective
@@ -120,12 +122,53 @@ If we consider a distribution $$\mathcal{S}$$ on $$S_N$$ with the probability ma
 Sampling permutations from $$\mathcal{S}$$ can be done by Markov chain Monte Carlo (MCMC) method. Define the cost matrix $$C = (C_{ij})$$ with $$C_{ij} = -\frac{(x_i - y_j)^2}{4t}$$. We use an MCMC starting from $$\sigma_0 = \text{id} \in S_N$$ and the proposals yielded by swapping entries of $$i,j$$, for $$i \in \{1,\cdots,N\}$$ sampled uniformly at random and $$j$$ sampled from distribution proportional to $$\exp(C_{ij})$$. Once the permutations $$\sigma_1,\cdots,\sigma_K \sim \mathcal{S}$$ are sampled, penalizing the model $$s_\theta$$ towards $$\mathbb{E}_{\mathcal{S}} [\nabla_{y} I(\sigma)] \approx \sum_{k=1}^K \nabla_{y} I(\sigma_k)$$ gives an unbiased estimate of the gradient:
 
 $$ \nabla_\theta \big  \|s_{\theta} - \mathbb{E}_{\mathcal{S}} [\nabla_{y} I(\sigma)] \big \| ^2 \\
-= \mathbb{E}_{\sigma_1,\cdots,\sigma_K \sim \mathcal{S}} \bigg[\nabla_\theta \big\| s_{\theta} - \sum_{k=1}^K \nabla_{y} I(\sigma) \big\| ^2 \bigg]
-$$xw
+= \mathbb{E}_{\sigma_1,\cdots,\sigma_K \sim \mathcal{S}} \bigg[\nabla_\theta \big\| s_{\theta} - \sum_{k=1}^K \nabla_{y} I(\sigma_k) \big\| ^2 \bigg].
+$$
+
+### Comparison with Equivariant Flow Matching
+
+Formulating diffusion models on Riemannian manifolds often requires complex information, like the manifold's heat kernel. In contrast, flow matching methods provide a simpler framework for generative models on these manifolds, needing only the exponential map and its inverse. Equivariant Flow Matching [cite] is in fact a direct flow-matching version of our approach but also incorporates rotational symmetry. When we model a point cloud as an element in a quotient manifold, the shortest geodesic between original and diffused states is found by identifying the permutation that optimally connects them, a task solved using the Hungarian algorithm.
+
+## Experiment
 
 
-## Significance
+To evaluate the effectiveness of our **Permutation Symmetrized Diffusion Model**, we perform experiments on the task of unconditional 3D molecular generation. Our goal is to assess its ability to generate novel and valid molecular structures compared to existing methods.
 
-The proposed method of defining diffusion on the quotient manifold $$\tilde{\mathcal{X}}$$ intrinsically embeds permutation symmetry into the foundational space of the generative process. This contrasts with approaches that rely solely on equivariant architectures to handle such symmetries. This framework offers a principled way to model permutation-invariant data, with potential applications in 3D molecular generation and other domains.
+### Experimental Setup
 
-For further details, please refer to the full research paper [Placeholder for Paper Link].
+* **Dataset**: We utilize the **QM9 dataset** <d-cite key="ramakrishnan2014quantum"></d-cite>, a widely adopted benchmark in molecular machine learning. QM9 consists of approximately 134,000 small organic molecules, each containing up to nine heavy atoms (Carbon, Nitrogen, Oxygen, and Fluorine), along with their 3D Cartesian coordinates.
+* **Task**: The task is **unconditional generation**, meaning the model generates 3D molecular structures without any input conditions like a molecular graph or target properties.
+* **Baseline Comparison**: We compare our method against **eqgat-diff** <d-cite key="PUT_EQGAT_DIFF_CITATION_KEY_HERE"></d-cite>, a notable equivariant diffusion model for 3D molecular generation. We aim to compare against reported results for eqgat-diff on the QM9 dataset.
+* **Our Model Details**: Our Permutation Symmetrized Diffusion Model is trained as described in the preceding sections. The score function $$\nabla \log \tilde{p}_t$$ was approximated using a neural network, and the training objective involved MCMC sampling to estimate the expectation $$\mathbb{E}_{\mathcal{S}}[\nabla_{y}I(\sigma)]$$.
+* **Evaluation Metrics**: We assessed the generated molecules using the following standard metrics:
+    * **Atom Stability**: The percentage atoms that adhere to valency rules (e.g. a carbon atom has a valency 4).
+    * **Molecule Stability**: The percentage of generated molecules in which atoms are all stable.
+    * **Validity**: The percentage of chemically valid molecules, as assessed by RDKit.
+    * **Uniqueness**: The percentage of valid generated molecules that are unique (based on their canonical SMILES representation) within a larger batch of generated samples, discounting isomorphic structures.
+    * **Novelty**: The percentage of unique and valid generated molecules that are not present in the QM9 training dataset.
+
+---
+### Results and Discussion
+
+We generated 10000 samples using our trained Permutation Symmetrized Diffusion Model and evaluated them according to the metrics defined above. The performance of our model compared to eqgat-diff is presented in Table 1. Since this is an ongoing research, we present the metrics measured once.
+
+| Metric                         | Our Method  | eqgat-diff (Reported) <d-cite key="PUT_EQGAT_DIFF_CITATION_KEY_HERE"></d-cite> |
+| :----------------------------- | :--------------------------------------------- | :------------------------------------------------ |
+| Molecule Stability (%)         | 98.95        | 98.68 ± 0.11           |
+| Atom Stability (%)             | 99.91         | 99.92 ± 0.00           |
+| Validity (%)                   | 99.05        | 98.96 ± 0.07         |
+| Uniqueness (%)                 |   100.00       | 100.00 ± 0.00          |
+| Novelty (%)                    | 63.33          | 64.03 ± 0.24          |
+*Table 1: Comparison of unconditional 3D molecular generation performance on the QM9 dataset.*
+
+### Future Directions
+
+
+<!-- 
+Our model achieved a molecule stability of [Your Value]%, atom stability of [Your Value]%, validity of [Your Value]%, uniqueness of [Your Value]%, and novelty of [Your Value]%.
+[**Insert a brief discussion of your results here. For example:**]
+"These results demonstrate that our Permutation Symmetrized Diffusion Model is competitive with state-of-the-art equivariant methods like eqgat-diff. Notably, our approach [mention any specific strengths observed, e.g., shows a strong ability to generate novel yet valid and stable structures / particularly excels in uniqueness, suggesting the quotient space formulation effectively explores diverse chemical configurations / performs comparably while offering a different conceptual framework for handling permutation symmetry]."
+
+Further analysis could involve comparing the distributions of chemical properties (e.g., number of specific atom types, bond types, ring counts) between the generated molecules and the training set to assess how well the model captures the underlying data distribution.
+
+The successful application to unconditional generation on QM9 suggests that explicitly modeling diffusion on the quotient manifold $$\tilde{\mathcal{X}}$$ is a promising direction for 3D molecular generation, effectively leveraging the inherent permutation symmetry of molecular data. -->

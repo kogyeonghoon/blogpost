@@ -70,7 +70,7 @@ On the other hand, we can think of a stronger notion of utilizing the symmetry. 
 ***
 ### Heat Kernel on the Quotient Manifold
 
-$\tilde{\mathcal{X}}$ inherits the Euclidean metric and has a well-defined heat kernel. Theorem 3.1 states the heat kernel $K^{\tilde{\mathcal{X}}}(t, \tilde{x}, \tilde{y})$ for $\tilde{x}, \tilde{y} \in \tilde{\mathcal{X}}$ is given by:
+Since the permutations are isometries of the Euclidean space, $\tilde{\mathcal{X}}$ inherits the Euclidean metric and has a well-defined heat kernel. Theorem 3.1 states the heat kernel $K^{\tilde{\mathcal{X}}}(t, \tilde{x}, \tilde{y})$ for $\tilde{x}, \tilde{y} \in \tilde{\mathcal{X}}$ is given by:
 $$K^{\tilde{\mathcal{X}}}(t, \tilde{x}, \tilde{y}) = \frac{1}{(4\pi t)^{dN/2}} \sum_{\sigma \in S_N} \exp\left(-\frac{\|x - \sigma(y)\|^2}{4t}\right)$$
 $$= \frac{1}{(4\pi t)^{dN/2}} \sum_{\sigma \in S_N} \prod_{i=1}^{N} \exp\left(-\frac{\|x_i - y_{\sigma^{-1}(i)}\|^2}{4t}\right) \quad$$
 This kernel is the sum of Euclidean heat kernels over all permutations, arising because permutations are Euclidean isometries. This means a particle $x_1$ can diffuse to any $y_i$, considering all $\sigma \in S_N$.

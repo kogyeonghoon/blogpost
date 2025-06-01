@@ -35,17 +35,17 @@ The generation of novel 3D molecular structures is a significant task in computa
 ***
 ### Forward and Reverse Stochastic Differential Equations (SDEs)
 
-In common, diffusion models operate in Euclidean space $$\mathcal{X} = \mathbb{R}^d$$. The forward noising often uses an Ornstein-Uhlenbeck (OU) process:
+In common, diffusion models operate in Euclidean space $$\mathcal{X} = \mathbb{R}^d$$. The **forward noising** often uses an **Ornstein-Uhlenbeck (OU) process**:
 
 $$dx^{(t)} = -\frac{1}{2}x^{(t)}dt + dw^{(t)} , \quad t \in [0,T]$$
 
-where $$w^{(t)}$$ is the standard d-dimensional Wiener process. This process has Gaussian transition kernels $$p_{t \mid s}(y \mid x)$$ and marginals $$p_t(x)$$ for $$0 \leq s < t \leq 0$$. The reverse denoising process follows the following SDE:
+where $$w^{(t)}$$ is the standard d-dimensional Wiener process. This process has Gaussian transition kernels $$p_{t \mid s}(y \mid x)$$ and marginals $$p_t(x)$$ for $$0 \leq s < t \leq 0$$. The **reverse denoising process** follows the following SDE:
 
 $$dx^{(t)} = \left[-\frac{1}{2}x^{(t)} - \nabla_{x^{(t)}} \log p_t(x^{(t)})\right]dt + d\overline{w}^{(t)} $$
 
 where $$\overline{w}^{(t)}$$ is a Wiener process running in reverse time. The backward transition kernel parametrized by $$q_{\theta, s \mid t}$$, with a model parameter $$\theta$$, enabling sampling from the data distribution by solving the reverse SDE.
 
-The score function $$\nabla_{x^{ (t) }} \log p_{t}(x^{ (t) })$$ is approximated by a neural network $$s_{ \theta }( x^{ (t) }, t)$$, trained using a denoising score loss. Given an initial sample $$x^{(0)}$$ and a noisy sample $$x^{ (t) }$$ obtained by perturbing $$x^{ (0) }$$ according to the forward process, the denoising score loss trains $$s_{\theta}( x^{ (t) }, t)$$ to estimate $$ \nabla_{ x^{ (t) } } \log p_{t \mid 0} { ( x^{ (t) }  \mid  x^{ (0) }) } $$. This objective provides an unbiased estimate for the score function $$ \nabla_{ x^{ (t) } } \log p_{t} ( x^{ (t) } )$$. Note that, the target quantity $$\nabla_{ x^{ (t) } } \log p_{t \mid 0}( x^{ (t) }  \mid  x^{ (0) } )$$ can be expressed in a closed-form equation since the transition kernel $$p_{t \mid 0}$$ is a closed form Gaussian.
+The **score function** $$\nabla_{x^{ (t) }} \log p_{t}(x^{ (t) })$$ is approximated by a neural network $$s_{ \theta }( x^{ (t) }, t)$$, trained using a denoising score loss. Given an initial sample $$x^{(0)}$$ and a noisy sample $$x^{ (t) }$$ obtained by perturbing $$x^{ (0) }$$ according to the forward process, the denoising score loss trains $$s_{\theta}( x^{ (t) }, t)$$ to estimate $$ \nabla_{ x^{ (t) } } \log p_{t \mid 0} { ( x^{ (t) }  \mid  x^{ (0) }) } $$. This objective provides an unbiased estimate for the score function $$ \nabla_{ x^{ (t) } } \log p_{t} ( x^{ (t) } )$$. Note that, the target quantity $$\nabla_{ x^{ (t) } } \log p_{t \mid 0}( x^{ (t) }  \mid  x^{ (0) } )$$ can be expressed in a closed-form equation since the transition kernel $$p_{t \mid 0}$$ is a closed form Gaussian.
 
 ***
 ### Heat Kernel and Score Function Computation
@@ -72,14 +72,14 @@ $$p_{t \mid s}(x^{(t)} \mid x^{(s)}) = p_{t \mid s}(\sigma(x^{(t)}) \mid \sigma(
 
 $$q_{\theta,s \mid t}(x^{(s)} \mid x^{(t)}) = q_{\theta,s \mid t}(\sigma(x^{(s)}) \mid \sigma(x^{(t)})) \quad \text{(reverse)}.$$
 
-The forward equivariance is achieved designing a permutation-equivariant forward SDE, and the reverse equivariance is achieved by using a permutation-equivaraint neural network. In this approach, *the process behaves identically* under permutation -- if the input is altered by a permutation, the otuput is altered accordingly by the same permutation.
+The forward equivariance is achieved designing a permutation-equivariant forward SDE, and the reverse equivariance is achieved by using a permutation-equivaraint neural network. In this approach, **the process behaves identically** under permutation -- if the input is altered by a permutation, the otuput is altered accordingly by the same permutation.
 
-On the other hand, we can think of a stronger notion of utilizing the symmetry. Instead of building an equivariant diffusion on $$\mathcal{X} = \mathbb{R}^{d\times N}$$, we model the diffusion process on the quotient manifold $$\tilde{\mathcal{X}} = \mathbb{R}^{d\times N} / S_N$$. Let $$\pi : {\mathcal{X}} = \mathbb{R}^{d\times N} \rightarrow \tilde{\mathcal{X}} = \mathbb{R}^{d\times N} / S_N $$ denote the quotient map, and let's write $$\tilde{x} = \pi(x)$$ for brevity. In this formulation, we have simply $$\tilde{\sigma(x)} = \tilde{x}$$, i.e. *the elements are identical* under permutation.
+On the other hand, we can think of a stronger notion of utilizing the symmetry. Instead of building an equivariant diffusion on $$\mathcal{X} = \mathbb{R}^{d\times N}$$, we model the diffusion process on the quotient manifold $$\tilde{\mathcal{X}} = \mathbb{R}^{d\times N} / S_N$$. Let $$\pi : {\mathcal{X}} = \mathbb{R}^{d\times N} \rightarrow \tilde{\mathcal{X}} = \mathbb{R}^{d\times N} / S_N $$ denote the quotient map, and let's write $$\tilde{x} = \pi(x)$$ for brevity. In this formulation, we have simply $$\tilde{\sigma(x)} = \tilde{x}$$, i.e. **the elements are identical** under permutation.
 
 ***
 ### Heat Kernel on the Quotient Manifold
 
-Since the permutations are isometries of the Euclidean space, $$\tilde{\mathcal{X}}$$ inherits the Euclidean metric and has a well-defined heat kernel. The heat kernel $$K^{\tilde{\mathcal{X}}}(t, \tilde{x}, \tilde{y})$$ on $$\tilde{\mathcal{X}}$$ for $$\tilde{x}, \tilde{y} \in \tilde{\mathcal{X}}$$ is given by:
+Since the permutations are **isometries** of the Euclidean space, $$\tilde{\mathcal{X}}$$ inherits the Euclidean metric and has a well-defined heat kernel. The heat kernel $$K^{\tilde{\mathcal{X}}}(t, \tilde{x}, \tilde{y})$$ on $$\tilde{\mathcal{X}}$$ for $$\tilde{x}, \tilde{y} \in \tilde{\mathcal{X}}$$ is given by:
 
 $$K^{\tilde{\mathcal{X}}}(t, \tilde{x}, \tilde{y}) = \frac{1}{(4\pi t)^{dN/2}} \sum_{\sigma \in S_N} \exp\left(-\frac{ \mid x - \sigma(y) \mid ^2}{4t}\right)$$
 
@@ -87,12 +87,12 @@ $$= \frac{1}{(4\pi t)^{dN/2}} \sum_{\sigma \in S_N} \prod_{i=1}^{N} \exp\left(-\
 
 In other words, the heat kernel on $$\tilde{\mathcal{X}}$$ is simply the sum of the Euclidean heat kernel over all the permutations. Below we list some core arguments for the proof:
 
-- The permutations are isometries, so the Riemannian metric of the quotient manifold is locally identical to the Euclidean metric. Hence if a function satisfy the diffusion equation locally in the Euclidean space, then it also satisfy the diffusion equation in the quotient space.
-- The diffusion equation is linear, so the a sum of the solution for the diffusion equation is also a solution.
-- The heat kernel on a Riemannian manifold is unique, so if we find one valid solution, then it's the only solution.
-- The function $$K^{\tilde{\mathcal{X}}}$$ satisfies $$\lim_{t \rightarrow 0} K^{\tilde{\mathcal{X}}} = \sum_{\sigma \in S_N} \delta (x - \sigma(y))$$, which is the Dirac delta in the quotient space.
+- The permutations are **isometries**, so the Riemannian metric of the quotient manifold is locally identical to the Euclidean metric. Hence if a function satisfy the diffusion equation locally in the Euclidean space, then it also satisfy the diffusion equation in the quotient space.
+- The diffusion equation is **linear**, so the a sum of the solution for the diffusion equation is also a solution.
+- The heat kernel on a Riemannian manifold is **unique**, so if we find one valid solution, then it's the only solution.
+- The function $$K^{\tilde{\mathcal{X}}}$$ satisfies $$\lim_{t \rightarrow 0} K^{\tilde{\mathcal{X}}} = \sum_{\sigma \in S_N} \delta (x - \sigma(y))$$, which is the **Dirac delta** in the quotient space.
 
-Identifying the heat kernel $$K^{\tilde{\mathcal{X}}}$$ reveals a key distinction between Euclidean diffusion models and our approach. This diffusion process introduces the possibility of *particles sharing their identity*. In a classic diffusion process, $$x_1$$ diffuses to $$y_1$$, and $$x_2$$ diffuses to $$y_2$$, and so on. However, in our model, $$x_1$$ can diffuse to any component $$y_i$$ (for $$i=1,\dots,N$$), and all possible configurations $$\sigma \in S_N$$, representing the diffusion of $$x$$ to $$\sigma(y)$$, are considered. This resembles the behavior of *bosons* in particle physics.
+Identifying the heat kernel $$K^{\tilde{\mathcal{X}}}$$ reveals a key distinction between Euclidean diffusion models and our approach. This diffusion process introduces the possibility of **particles sharing their identity**. In a classic diffusion process, $$x_1$$ diffuses to $$y_1$$, and $$x_2$$ diffuses to $$y_2$$, and so on. However, in our model, $$x_1$$ can diffuse to any component $$y_i$$ (for $$i=1,\dots,N$$), and all possible configurations $$\sigma \in S_N$$, representing the diffusion of $$x$$ to $$\sigma(y)$$, are considered. This resembles the behavior of **bosons** in particle physics.
 
 
 ***
@@ -119,7 +119,7 @@ $$\nabla_{\tilde{y}}\log\tilde{p}_{t}(\tilde{y} \mid \tilde{x}) = \sum_{\sigma\i
 
 If we consider a distribution $$\mathcal{S}$$ on $$S_N$$ with the probability mass function $$q(\sigma) \propto \exp(I(\sigma))$$, the score function becomes the expectation $$\mathbb{E}_{\mathcal{S}}[\nabla_{y}I(\sigma)]$$.
 
-Sampling permutations from $$\mathcal{S}$$ can be done by Markov chain Monte Carlo (MCMC) method. Define the cost matrix $$C = (C_{ij})$$ with $$C_{ij} = -\frac{(x_i - y_j)^2}{4t}$$. We use an MCMC starting from $$\sigma_0 = \text{id} \in S_N$$ and the proposals yielded by swapping entries of $$i,j$$, for $$i \in \{1,\cdots,N\}$$ sampled uniformly at random and $$j$$ sampled from distribution proportional to $$\exp(C_{ij})$$. Once the permutations $$\sigma_1,\cdots,\sigma_K \sim \mathcal{S}$$ are sampled, penalizing the model $$s_\theta$$ towards $$\mathbb{E}_{\mathcal{S}} [\nabla_{y} I(\sigma)] \approx \sum_{k=1}^K \nabla_{y} I(\sigma_k)$$ gives an unbiased estimate of the gradient:
+Sampling permutations from $$\mathcal{S}$$ can be done by **Markov chain Monte Carlo (MCMC)** method. Define the cost matrix $$C = (C_{ij})$$ with $$C_{ij} = -\frac{(x_i - y_j)^2}{4t}$$. We use an MCMC starting from $$\sigma_0 = \text{id} \in S_N$$ and the proposals yielded by swapping entries of $$i,j$$, for $$i \in \{1,\cdots,N\}$$ sampled uniformly at random and $$j$$ sampled from distribution proportional to $$\exp(C_{ij})$$. Once the permutations $$\sigma_1,\cdots,\sigma_K \sim \mathcal{S}$$ are sampled, penalizing the model $$s_\theta$$ towards $$\mathbb{E}_{\mathcal{S}} [\nabla_{y} I(\sigma)] \approx \sum_{k=1}^K \nabla_{y} I(\sigma_k)$$ gives an unbiased estimate of the gradient:
 
 $$ \nabla_\theta \big  \|s_{\theta} - \mathbb{E}_{\mathcal{S}} [\nabla_{y} I(\sigma)] \big \| ^2 \\
 = \mathbb{E}_{\sigma_1,\cdots,\sigma_K \sim \mathcal{S}} \bigg[\nabla_\theta \big\| s_{\theta} - \sum_{k=1}^K \nabla_{y} I(\sigma_k) \big\| ^2 \bigg].
@@ -127,7 +127,7 @@ $$
 
 ### Comparison with Equivariant Flow Matching
 
-Formulating diffusion models on Riemannian manifolds often requires complex information, like the manifold's heat kernel. In contrast, flow matching methods provide a simpler framework for generative models on these manifolds, needing only the exponential map and its inverse. Equivariant Flow Matching [cite] is in fact a direct flow-matching version of our approach but also incorporates rotational symmetry. When we model a point cloud as an element in a quotient manifold, the shortest geodesic between original and diffused states is found by identifying the permutation that optimally connects them, a task solved using the Hungarian algorithm.
+Formulating diffusion models on Riemannian manifolds often requires complex information, like the manifold's heat kernel. In contrast, **flow matching** methods provide a simpler framework for generative models on these manifolds, needing only the exponential map and its inverse. **Equivariant Flow Matching** [cite] is in fact a direct flow-matching version of our approach but also incorporates rotational symmetry. When we model a point cloud as an element in a quotient manifold, the shortest geodesic between original and diffused states is found by identifying the permutation that optimally connects them, a task solved using the Hungarian algorithm.
 
 ## Experiment
 
@@ -150,7 +150,7 @@ To evaluate the effectiveness of our **Permutation Symmetrized Diffusion Model**
 ---
 ### Results and Discussion
 
-We generated 10000 samples using our trained Permutation Symmetrized Diffusion Model and evaluated them according to the metrics defined above. The performance of our model compared to eqgat-diff is presented in Table 1. Since this is an ongoing research, we present the metrics measured once.
+We generated 10000 samples using our trained Permutation Symmetrized Diffusion Model and evaluated them according to the metrics defined above. The performance of our model compared to eqgat-diff is presented in Table 1. Since this is an ongoing research, we present the metrics measured only once.
 
 | Metric                         | Our Method  | eqgat-diff (Reported) <d-cite key="PUT_EQGAT_DIFF_CITATION_KEY_HERE"></d-cite> |
 | :----------------------------- | :--------------------------------------------- | :------------------------------------------------ |
@@ -163,12 +163,7 @@ We generated 10000 samples using our trained Permutation Symmetrized Diffusion M
 
 ### Future Directions
 
+In this article, we introduce a current stauts of an ongoing research. As this research continues, we plan to analyze sampling trajectories and better understand the model's dynamics on the quotient manifold. We hope these insights will guide core methodology improvements, such as optimized noise schedules and more efficient MCMC sampling strategies, aiming for better score matching and faster convergence. We also plan to evaluate scalability and generalizability using larger, more complex datasets like GEOM-DRUG. We look forward to our permutation-symmetrized approach improving diffusion model methodologies for 3D molecular generation tasks.
 
-<!-- 
-Our model achieved a molecule stability of [Your Value]%, atom stability of [Your Value]%, validity of [Your Value]%, uniqueness of [Your Value]%, and novelty of [Your Value]%.
-[**Insert a brief discussion of your results here. For example:**]
-"These results demonstrate that our Permutation Symmetrized Diffusion Model is competitive with state-of-the-art equivariant methods like eqgat-diff. Notably, our approach [mention any specific strengths observed, e.g., shows a strong ability to generate novel yet valid and stable structures / particularly excels in uniqueness, suggesting the quotient space formulation effectively explores diverse chemical configurations / performs comparably while offering a different conceptual framework for handling permutation symmetry]."
 
-Further analysis could involve comparing the distributions of chemical properties (e.g., number of specific atom types, bond types, ring counts) between the generated molecules and the training set to assess how well the model captures the underlying data distribution.
 
-The successful application to unconditional generation on QM9 suggests that explicitly modeling diffusion on the quotient manifold $$\tilde{\mathcal{X}}$$ is a promising direction for 3D molecular generation, effectively leveraging the inherent permutation symmetry of molecular data. -->

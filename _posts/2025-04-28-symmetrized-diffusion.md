@@ -35,11 +35,11 @@ The generation of novel 3D molecular structures is a significant task in computa
 ***
 ### Forward and Reverse Stochastic Differential Equations (SDEs)
 
-In common, diffusion models operate in Euclidean space $$\mathcal{X} = \mathbb{R}^d$$. The **forward noising** often uses an **Ornstein-Uhlenbeck (OU) process**:
+In common, diffusion models operate in Euclidean space $$\mathcal{X} = \mathbb{R}^d$$. The **forward noising** often uses an **Ornstein-Uhlenbeck (OU) process** <d-cite key="song2020score">:
 
 $$dx^{(t)} = -\frac{1}{2}x^{(t)}dt + dw^{(t)} , \quad t \in [0,T]$$
 
-where $$w^{(t)}$$ is the standard d-dimensional Wiener process. This process has Gaussian transition kernels $$p_{t \mid s}(y \mid x)$$ and marginals $$p_t(x)$$ for $$0 \leq s < t \leq 0$$. The **reverse denoising process** follows the following SDE:
+where $$w^{(t)}$$ is the standard $$d$$-dimensional Wiener process. This process has Gaussian transition kernels $$p_{t \mid s}(y \mid x)$$ and marginals $$p_t(x)$$ for $$0 \leq s < t \leq 0$$. The **reverse denoising process** follows the following SDE:
 
 $$dx^{(t)} = \left[-\frac{1}{2}x^{(t)} - \nabla_{x^{(t)}} \log p_t(x^{(t)})\right]dt + d\overline{w}^{(t)} $$
 
@@ -152,14 +152,54 @@ To evaluate the effectiveness of our **Permutation Symmetrized Diffusion Model**
 
 We generated 10000 samples using our trained Permutation Symmetrized Diffusion Model and evaluated them according to the metrics defined above. The performance of our model compared to eqgat-diff is presented in Table 1. Since this is an ongoing research, we present the metrics measured only once.
 
-| Metric                         | Our Method  | eqgat-diff (Reported) <d-cite key="PUT_EQGAT_DIFF_CITATION_KEY_HERE"></d-cite> |
+<!-- | Metric                         | Our Method  | eqgat-diff (Reported) <d-cite key="PUT_EQGAT_DIFF_CITATION_KEY_HERE"></d-cite> |
 | :----------------------------- | :--------------------------------------------- | :------------------------------------------------ |
 | Molecule Stability (%)         | 98.95        | 98.68 ± 0.11           |
 | Atom Stability (%)             | 99.91         | 99.92 ± 0.00           |
 | Validity (%)                   | 99.05        | 98.96 ± 0.07         |
 | Uniqueness (%)                 |   100.00       | 100.00 ± 0.00          |
 | Novelty (%)                    | 63.33          | 64.03 ± 0.24          |
-*Table 1: Comparison of unconditional 3D molecular generation performance on the QM9 dataset.*
+*Table 1: Comparison of unconditional 3D molecular generation performance on the QM9 dataset.* -->
+
+<div style="display:flex; align-items:center; justify-content: center; margin:20px; font-size:14px;">
+    <table style="border-collapse: collapse; text-align: center; border: 0px;">
+      <thead>
+        <tr>
+          <th style="border: 0px; border-bottom: 2px solid grey; padding: 8px; font-weight: 900; text-align: left;">Metric</th>
+          <th style="border: 0px; border-bottom: 2px solid grey; padding: 8px; font-weight: 900; text-align: center;">Our Method</th>
+          <th style="border: 0px; border-bottom: 2px solid grey; padding: 8px; font-weight: 900; text-align: center;">eqgat-diff (Reported) <d-cite key="PUT_EQGAT_DIFF_CITATION_KEY_HERE"></d-cite></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th style="border: 0px; padding: 8px; text-align: left; font-weight: 600;"><em>Molecule Stability (%)</em></th>
+          <td style="border: 0px; padding: 8px;">98.95</td>
+          <td style="border: 0px; padding: 8px;">98.68 ± 0.11</td>
+        </tr>
+        <tr>
+          <th style="border: 0px; padding: 8px; text-align: left; font-weight: 600;"><em>Atom Stability (%)</em></th>
+          <td style="border: 0px; padding: 8px;">99.91</td>
+          <td style="border: 0px; padding: 8px;">99.92 ± 0.00</td>
+        </tr>
+        <tr>
+          <th style="border: 0px; padding: 8px; text-align: left; font-weight: 600;"><em>Validity (%)</em></th>
+          <td style="border: 0px; padding: 8px;">99.05</td>
+          <td style="border: 0px; padding: 8px;">98.96 ± 0.07</td>
+        </tr>
+        <tr>
+          <th style="border: 0px; padding: 8px; text-align: left; font-weight: 600;"><em>Uniqueness (%)</em></th>
+          <td style="border: 0px; padding: 8px;">100.00</td>
+          <td style="border: 0px; padding: 8px;">100.00 ± 0.00</td>
+        </tr>
+        <tr>
+          <th style="border: 0px; border-bottom: 3px solid black; padding: 8px; text-align: left; font-weight: 600;"><em>Novelty (%)</em></th>
+          <td style="border: 0px; border-bottom: 3px solid black; padding: 8px;">63.33</td>
+          <td style="border: 0px; border-bottom: 3px solid black; padding: 8px;">64.03 ± 0.24</td>
+        </tr>
+      </tbody>
+    </table>
+</div>
+<p style="text-align:center; font-style:italic; font-size:14px; margin-top: 5px;">Table 1: Comparison of unconditional 3D molecular generation performance on the QM9 dataset.</p>
 
 ### Future Directions
 

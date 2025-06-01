@@ -32,8 +32,6 @@ The generation of novel 3D molecular structures is a significant task in computa
 
 ## Diffusion in Euclidean space
 
-
-***
 ### Forward and Reverse Stochastic Differential Equations (SDEs)
 
 In common, diffusion models operate in Euclidean space $$\mathcal{X} = \mathbb{R}^d$$. The **forward noising** often uses an **Ornstein-Uhlenbeck (OU) process** <d-cite key="song2020score"></d-cite>:
@@ -48,7 +46,6 @@ where $$\overline{w}^{(t)}$$ is a Wiener process running in reverse time. The ba
 
 The **score function** $$\nabla_{x^{ (t) }} \log p_{t}(x^{ (t) })$$ is approximated by a neural network $$s_{ \theta }( x^{ (t) }, t)$$, trained using a denoising score loss <d-cite key="vincent2011connection"></d-cite>. Given an initial sample $$x^{(0)}$$ and a noisy sample $$x^{ (t) }$$ obtained by perturbing $$x^{ (0) }$$ according to the forward process, the denoising score loss trains $$s_{\theta}( x^{ (t) }, t)$$ to estimate $$ \nabla_{ x^{ (t) } } \log p_{t \mid 0} { ( x^{ (t) }  \mid  x^{ (0) }) } $$. This objective provides an unbiased estimate for the score function $$ \nabla_{ x^{ (t) } } \log p_{t} ( x^{ (t) } )$$. Note that, the target quantity $$\nabla_{ x^{ (t) } } \log p_{t \mid 0}( x^{ (t) }  \mid  x^{ (0) } )$$ can be expressed in a closed-form equation since the transition kernel $$p_{t \mid 0}$$ is a closed form Gaussian.
 
-***
 ### Heat Kernel and Score Function Computation
 
 Beneath the formulation of diffusion models, there is an important fact that the **heat kernel** $$K(t,x,y)$$, solving $$\frac{\partial}{\partial t}K = \Delta_y K$$ with the initial condition $$\lim_{t \rightarrow 0} K = \delta(x-y)$$, is Gaussian:
@@ -60,10 +57,7 @@ Since the forward process distributions are Gaussian, the score functions (e.g.,
 ***
 ## Method: Permutation Symmetrized Diffusion
 
-
-***
 ### Rethinking Permutation Symmetry in Diffusion Models
-
 
 For 3D molecular generation, data is a point cloud $$x = (x_1, \dots, x_N)$$ where $$x_i \in \mathbb{R}^d$$, residing in the space $$\mathcal{X} = \mathbb{R}^{d \times N}$$.
 Molecules exhibit permutation symmetry under the group $$S_N$$, in a sense that for $$\sigma \in S_N$$, its group action $$\sigma(x) = (x_{\sigma^{-1}(1)}, \dots, x_{\sigma^{-1}(N)})$$ gives the same molecule.
@@ -77,7 +71,6 @@ The forward equivariance is achieved designing a permutation-equivariant forward
 
 On the other hand, we can think of a stronger notion of utilizing the symmetry. Instead of building an equivariant diffusion on $$\mathcal{X} = \mathbb{R}^{d\times N}$$, we model the diffusion process on the quotient manifold $$\tilde{\mathcal{X}} = \mathbb{R}^{d\times N} / S_N$$. Let $$\pi : {\mathcal{X}} = \mathbb{R}^{d\times N} \rightarrow \tilde{\mathcal{X}} = \mathbb{R}^{d\times N} / S_N $$ denote the quotient map, and let's write $$\tilde{x} = \pi(x)$$ for brevity. In this formulation, we have simply $$\tilde{\sigma(x)} = \tilde{x}$$, i.e. **the elements are identical** under permutation.
 
-***
 ### Heat Kernel on the Quotient Manifold
 
 Since the permutations are **isometries** of the Euclidean space, $$\tilde{\mathcal{X}}$$ inherits the Euclidean metric and has a well-defined heat kernel. The heat kernel $$K^{\tilde{\mathcal{X}}}(t, \tilde{x}, \tilde{y})$$ on $$\tilde{\mathcal{X}}$$ for $$\tilde{x}, \tilde{y} \in \tilde{\mathcal{X}}$$ is given by:
@@ -95,8 +88,6 @@ In other words, the heat kernel on $$\tilde{\mathcal{X}}$$ is simply the sum of 
 
 Identifying the heat kernel $$K^{\tilde{\mathcal{X}}}$$ reveals a key distinction between Euclidean diffusion models and our approach. This diffusion process introduces the possibility of **particles sharing their identity**. In a classic diffusion process, $$x_1$$ diffuses to $$y_1$$, and $$x_2$$ diffuses to $$y_2$$, and so on. However, in our model, $$x_1$$ can diffuse to any component $$y_i$$ (for $$i=1,\dots,N$$), and all possible configurations $$\sigma \in S_N$$, representing the diffusion of $$x$$ to $$\sigma(y)$$, are considered. This resembles the behavior of **bosons** in particle physics.
 
-
-***
 ### SDEs on the Quotient Manifold
 
 The Ornstein-Uhlenbeck process is pushed forward to $$\tilde{\mathcal{X}}$$. The **forward SDE** on $$\tilde{\mathcal{X}}$$ is:
@@ -111,7 +102,6 @@ where $$\overline{\tilde{w}}^{(t)}$$ is the time-reversed version of the Brownia
 
 Since the heat kernel is a sum over permutations, the transition kernels $$\tilde{p}_{t \mid s}$$ and marginals $$\tilde{p}_t$$ on the quotient manifold are similarly obtained by summing their Euclidean counterparts over all permutations.
 
-***
 ### Training Objective
 
 The target score function for the diffusion loss is $$\nabla \log \tilde{p}_t$$. Although we identified the transition kernel $$\tilde{p}_t$$, direct computation of $$\tilde{p}_t$$ is impossible becuase it involves summation over the permutation group that has a size $$N!$$. Instead, we look at the score function $$\nabla_{\tilde{y}}\log\tilde{p}_{t}(\tilde{y} \mid \tilde{x})$$ directly. Letting $$I(\sigma) = -\frac{ \mid x-\sigma(y) \mid ^2}{4t}$$, the score function is:
@@ -132,7 +122,6 @@ Formulating diffusion models on Riemannian manifolds often requires complex info
 
 ## Experiment
 
-
 To evaluate the effectiveness of our **Permutation Symmetrized Diffusion Model**, we perform experiments on the task of unconditional 3D molecular generation. Our goal is to assess its ability to generate novel and valid molecular structures compared to existing methods.
 
 ### Experimental Setup
@@ -148,7 +137,6 @@ To evaluate the effectiveness of our **Permutation Symmetrized Diffusion Model**
     * **Uniqueness**: The percentage of valid generated molecules that are unique (based on their canonical SMILES representation) within a larger batch of generated samples, discounting isomorphic structures.
     * **Novelty**: The percentage of unique and valid generated molecules that are not present in the QM9 training dataset.
 
----
 ### Results
 
 We generated 10000 samples using our trained Permutation Symmetrized Diffusion Model and evaluated them according to the metrics defined above. The performance of our model compared to EQGAT-diff is presented in Table 1. Since this is an ongoing research, we present the metrics measured only once.

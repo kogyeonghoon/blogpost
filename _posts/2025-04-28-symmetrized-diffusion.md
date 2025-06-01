@@ -160,7 +160,7 @@ We generated 10000 samples using our trained Permutation Symmetrized Diffusion M
         <tr>
           <th style="border: 0px; border-bottom: 2px solid grey; padding: 8px; font-weight: 900; text-align: left;">Metric</th>
           <th style="border: 0px; border-bottom: 2px solid grey; padding: 8px; font-weight: 900; text-align: center;">Our Method</th>
-          <th style="border: 0px; border-bottom: 2px solid grey; padding: 8px; font-weight: 900; text-align: center;">EQGAT-diff (Reported) <d-cite key="PUT_EQGAT_DIFF_CITATION_KEY_HERE"></d-cite></th>
+          <th style="border: 0px; border-bottom: 2px solid grey; padding: 8px; font-weight: 900; text-align: center;">EQGAT-diff (Reported) <d-cite key="le2024eqgatdiff"></d-cite></th>
         </tr>
       </thead>
       <tbody>

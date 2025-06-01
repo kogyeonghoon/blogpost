@@ -1,10 +1,10 @@
 ---
 layout: distill
-title: Permutation Symmetrized Diffusion Models for 3D Molecular Generation
+title: AI801 Blog Post (20238188) Permutation Symmetrized Diffusion Models for 3D Molecular Generation
 description: This article introduces an ongoing research called Permutation Symmetrized Diffusion Models for 3D Molecular Generation, a novel approach that addresses the inherent permutation symmetry of molecular data.
-date: 2025-04-28 # You can change this date as needed
+date: 2025-06-01 # You can change this date as needed
 authors:
-  - name: Author One # Placeholder, please update
+  - name: Gyeonghoon Ko # Placeholder, please update
     # url: "Link to Author One's page"
     # affiliations:
     #   name: "Affiliation One"
@@ -24,11 +24,11 @@ toc:
   - name: Experiment
     subsections:
     - name: Experimental Setup
-    - name: Results and Discussion
+    - name: Results
     - name: Future Directions
 ---
 
-The generation of novel 3D molecular structures is a significant task in computational chemistry, drug discovery, and materials science. Diffusion-based generative models have emerged as a powerful class of methods for such tasks. In this article, we propose a novel formulation of diffusion models that incorporates a stronger notion of permutation symmetry.
+The generation of novel 3D molecular structures is a significant task in computational chemistry, drug discovery, and materials science. Diffusion-based generative models have emerged as a powerful class of methods for such tasks. In this article, we introduce an ongoing research about diffusion models that incorporates a stronger notion of permutation symmetry.
 
 ## Diffusion in Euclidean space
 
@@ -149,7 +149,7 @@ To evaluate the effectiveness of our **Permutation Symmetrized Diffusion Model**
     * **Novelty**: The percentage of unique and valid generated molecules that are not present in the QM9 training dataset.
 
 ---
-### Results and Discussion
+### Results
 
 We generated 10000 samples using our trained Permutation Symmetrized Diffusion Model and evaluated them according to the metrics defined above. The performance of our model compared to EQGAT-diff is presented in Table 1. Since this is an ongoing research, we present the metrics measured only once.
 
@@ -196,7 +196,7 @@ We generated 10000 samples using our trained Permutation Symmetrized Diffusion M
 
 ### Future Directions
 
-In this article, we introduce a current stauts of an ongoing research. As this research continues, we plan to analyze sampling trajectories and better understand the model's dynamics on the quotient manifold. We hope these insights will guide core methodology improvements, such as optimized noise schedules and more efficient MCMC sampling strategies, aiming for better score matching and faster convergence. We also plan to evaluate scalability and generalizability using larger, more complex datasets like GEOM-DRUG <d-cite key="axelrod2022geom"></d-cite>. We look forward to our permutation-symmetrized approach improving diffusion model methodologies for 3D molecular generation tasks.
+In this article, we introduce a current stauts of an ongoing research named **Permutation Symmetrized Diffusion Models**. As this research continues, we plan to analyze sampling trajectories and better understand the model's dynamics on the quotient manifold. We hope these insights will guide core methodology improvements, such as optimized noise schedules and more efficient MCMC sampling strategies, aiming for better score matching and faster convergence. We also plan to evaluate scalability and generalizability using larger, more complex datasets like GEOM-DRUG <d-cite key="axelrod2022geom"></d-cite>. We look forward to our permutation-symmetrized approach improving diffusion model methodologies for 3D molecular generation tasks.
 
 
 

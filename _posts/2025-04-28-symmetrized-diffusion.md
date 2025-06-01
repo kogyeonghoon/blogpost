@@ -85,12 +85,14 @@ $$K^{\tilde{\mathcal{X}}}(t, \tilde{x}, \tilde{y}) = \frac{1}{(4\pi t)^{dN/2}} \
 
 $$= \frac{1}{(4\pi t)^{dN/2}} \sum_{\sigma \in S_N} \prod_{i=1}^{N} \exp\left(-\frac{ \mid x_i - y_{\sigma^{-1}(i)} \mid ^2}{4t}\right) \quad$$
 
-In other words, the heat kernel on $$\tilde{\mathcal{X}}$$ is simply the sum of the Euclidean heat kernel over all the permutations. Below we descirbe a couple of key statements for the proof:
+In other words, the heat kernel on $$\tilde{\mathcal{X}}$$ is simply the sum of the Euclidean heat kernel over all the permutations. Below we list some core arguments for the proof:
 
-- The permutations are isometries, so the Riemannian metric of the quotient manifold is identical to the Euclidean metric. Hence if a function satisfy the diffusion equation locally in the Euclidean space, then it also satisfy the diffusion equation in the quotient space.
+- The permutations are isometries, so the Riemannian metric of the quotient manifold is locally identical to the Euclidean metric. Hence if a function satisfy the diffusion equation locally in the Euclidean space, then it also satisfy the diffusion equation in the quotient space.
 - The diffusion equation is linear, so the a sum of the solution for the diffusion equation is also a solution.
 - The heat kernel on a Riemannian manifold is unique, so if we find one valid solution, then it's the only solution.
-- The function $$K^{\tilde{\mathcal{X}}}$$ satisfies $$\lim_{t \rightarrow 0} K^{\tilde{\mathcal{X}}} = \sum_{\sigma \in S_N} \delta (x - \sigma(y))$$, which is the dirac delta in the quotient space.
+- The function $$K^{\tilde{\mathcal{X}}}$$ satisfies $$\lim_{t \rightarrow 0} K^{\tilde{\mathcal{X}}} = \sum_{\sigma \in S_N} \delta (x - \sigma(y))$$, which is the Dirac delta in the quotient space.
+
+Identifying the heat kernel $$K^{\tilde{\mathcal{X}}}$$ reveals a key distinction between Euclidean diffusion models and our approach. This diffusion process introduces the possibility of *particles sharing their identity*. In a classic diffusion process, $$x_1$$ diffuses to $$y_1$$, and $$x_2$$ diffuses to $$y_2$$, and so on. However, in our model, $$x_1$$ can diffuse to any component $$y_i$$ (for $$i=1,\dots,N$$), and all possible configurations $$\sigma \in S_N$$, representing the diffusion of $$x$$ to $$\sigma(y)$$, are considered. This resembles the behavior of *bosons* in particle physics.
 
 
 ***
@@ -102,22 +104,25 @@ $$d\tilde{x}^{(t)} = -\frac{1}{2}\tilde{x}^{(t)}dt + d\tilde{w}^{(t)}$$
 
 and the **reverse SDE** is:
 
-$$d\tilde{x}^{(t)} = \left[-\frac{1}{2}\tilde{x}^{(t)} - \nabla_{\tilde{x}^{(t)}} \log \tilde{p}_t(\tilde{x}^{(t)})\right]dt + d\tilde{w}^{(t)}$$
+$$d\tilde{x}^{(t)} = \left[-\frac{1}{2}\tilde{x}^{(t)} - \nabla_{\tilde{x}^{(t)}} \log \tilde{p}_t(\tilde{x}^{(t)})\right]dt + d\overline{\tilde{w}}^{(t)}$$
 
-Since the heat kernel is a sum over permutations, the transition kernels $$\tilde{p}_{t \mid s}$$ and marginals $$\tilde{p}_t$$ on the quotient manifold are similarly obtained by summing their Euclidean counterparts over all permutations.
+where $$\tilde{w}^{(t)}$$ is the Brownian motion in the quotient manifold $$\hat{\mathcal{X}}$$ and $$\overline{\tilde{w}}^{(t)}$$ is its time-reversed version. Note that obtaining the push-forward of the SDEs did not require complicated considerations becauese the OU process permutation invariant. Since the heat kernel is a sum over permutations, the transition kernels $$\tilde{p}_{t \mid s}$$ and marginals $$\tilde{p}_t$$ on the quotient manifold are similarly obtained by summing their Euclidean counterparts over all permutations.
 
 ***
 ### Training Objective
 
 The target score function for the diffusion loss is $$\nabla \log \tilde{p}_t$$. Although we identified the transition kernel $$\tilde{p}_t$$, direct computation of $$\tilde{p}_t$$ is impossible becuase it involves summation over the permutation group that has a size $$N!$$. Instead, we look at the score function $$\nabla_{\tilde{y}}\log\tilde{p}_{t}(\tilde{y} \mid \tilde{x})$$ directly. Letting $$I(\sigma) = -\frac{ \mid x-\sigma(y) \mid ^2}{4t}$$, the score function is:
 
-$$\nabla_{\tilde{y}}\log\tilde{p}_{t}(\tilde{y} \mid \tilde{x}) = \sum_{\sigma\in S_{N}}\frac{\exp(I(\sigma))}{\sum_{\sigma^{\prime}\in S_{N}}\exp(I(\sigma^{\prime}))}\nabla_{y}I(\sigma)$$
+$$\nabla_{\tilde{y}}\log\tilde{p}_{t}(\tilde{y} \mid \tilde{x}) = \sum_{\sigma\in S_{N}}\frac{\exp(I(\sigma))}{\sum_{\sigma^{\prime}\in S_{N}}\exp(I(\sigma^{\prime}))}\nabla_{y}I(\sigma).$$
 
-If we consider a distribution $$\mathcal{S}$$ on $$S_N$$ with the probability mass function $$q(\sigma) \propto exp(I(\sigma))$$, the score function suprisingly becomes the expectation $$\mathbb{E}_{\mathcal{S}}[\nabla_{y}I(\sigma)]$$. We can 
+If we consider a distribution $$\mathcal{S}$$ on $$S_N$$ with the probability mass function $$q(\sigma) \propto \exp(I(\sigma))$$, the score function becomes the expectation $$\mathbb{E}_{\mathcal{S}}[\nabla_{y}I(\sigma)]$$.
 
+Sampling permutations from $$\mathcal{S}$$ can be done by Markov chain Monte Carlo (MCMC) method. Define the cost matrix $$C = (C_{ij})$$ with $$C_{ij} = -\frac{(x_i - y_j)^2}{4t}$$. We use an MCMC starting from $$\sigma_0 = \text{id} \in S_N$$ and the proposals yielded by swapping entries of $$i,j$$, for $$i \in \{1,\cdots,N\}$$ sampled uniformly at random and $$j$$ sampled from distribution proportional to $$\exp(C_{ij})$$. Once the permutations $$\sigma_1,\cdots,\sigma_K \sim \mathcal{S}$$ are sampled, penalizing the model $$s_\theta$$ towards $$\mathbb{E}_{\mathcal{S}} [\nabla_{y} I(\sigma)] \approx \sum_{k=1}^K \nabla_{y} I(\sigma_k)$$ gives an unbiased estimate of the gradient:
 
-Training involves sampling permutations to estimate this expected score. We can 
-Training involves sampling permutations $$\sigma_1, \dots, \sigma_K \sim \mathcal{S}$$ (e.g., using MCMC methods) and penalizing the model $$s_{\theta}$$ towards an unbiased estimate of this expected score.
+$$ \nabla_\theta \big  \|s_{\theta} - \mathbb{E}_{\mathcal{S}} [\nabla_{y} I(\sigma)] \big \| ^2 \\
+= \mathbb{E}_{\sigma_1,\cdots,\sigma_K \sim \mathcal{S}} \bigg[\nabla_\theta \big\| s_{\theta} - \sum_{k=1}^K \nabla_{y} I(\sigma) \big\| ^2 \bigg]
+$$xw
+
 
 ## Significance
 
